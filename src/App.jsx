@@ -1,7 +1,11 @@
+import AsidePanel from "./assets/components/AsidePanel.jsx";
+import Project from "./assets/components/Project.jsx";
+
 function App() {
   return (
     <>
-      <h1 className="my-8 text-center text-5xl font-bold">Hello World</h1>
+      <AsidePanel></AsidePanel>
+      <Project></Project>
     </>
   );
 }
