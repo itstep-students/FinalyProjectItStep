@@ -13,7 +13,8 @@ export default function Project ({addProject, onSave, onCancel}) {
             title: formData.get('title'),
             text: formData.get('text'),
             date: formData.get('date'),
-            id: Math.random()
+            id: Math.random(),
+            tasks: []
         }
         if (formData.get('title').trim() === '' || formData.get('text').trim() === '' || formData.get('date').trim() === '') {
         //     setStyles(true)
@@ -28,7 +29,7 @@ export default function Project ({addProject, onSave, onCancel}) {
              <form onSubmit={(e) => saveData(e)} className="flex gap-8 flex-grow flex-col justify-center items-center mb-60">
                  <div className="w-11/12 pl-14 pr-40 mt-32">
                      <menu className="w-full text-end mb-8 flex justify-end">
-                         <li><button onClick={onCancel} className="opacity-100 mr-4 px-4 py-3 text-xl font-medium text-black font-sans hover:opacity-75 transition-opacity">Cancel</button></li>
+                         <li><button onClick={onCancel} className="mr-4 px-4 py-3 text-xl font-medium text-black font-sans hover:text-red-700 transition-colors">Cancel</button></li>
                          <li><button onClick={onSave} className="rounded-lg opacity-100 px-8 py-3 bg-black text-xl text-white font-sans hover:opacity-80 transition-opacity">Save</button></li>
                      </menu>
                      <div className="mb-6">
