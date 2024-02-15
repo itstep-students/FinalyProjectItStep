@@ -21,7 +21,7 @@ function App() {
                 projectId: oldParam.selectedID
             }
             const newArrTasks = oldParam.projects.map(item => {
-                if(item.id === oldParam.selectedID) {
+                if (item.id === oldParam.selectedID) {
                     item.tasks = [...item.tasks, newTask]
                     return item;
                 }
@@ -53,8 +53,7 @@ function App() {
 
     function handleSelectSideProject(id) {
         updateProjects((oldParam) => {
-            let target = oldParam.projects.find((item) => item.title === id.target.innerText);
-            return {...oldParam, selectedID: target.id}
+            return {...oldParam, selectedID: +id.target.id}
         })
     }
 
@@ -62,7 +61,6 @@ function App() {
         e.preventDefault()
         setStartedProject(true);
     }
-
     function handleDeleteProject() {
         updateProjects((oldParam) => {
             return {

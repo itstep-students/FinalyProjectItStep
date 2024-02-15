@@ -6,7 +6,7 @@ export default function AsidePanel({isStart, projects, onSelectSideProject, sele
                 <div>
                     <button onClick={isStart} className="rounded-lg mb-4 opacity-75 bg-stone-700 ml-8 px-6 py-3 text-xl hover:opacity-100 transition-opacity">+ Add Project</button>
                 </div>
-                <ul>
+                <ul className="my-6">
                     {projects.projects.map(item => {
                         let classes = "w-full overflow-hidden whitespace-nowrap text-ellipsis mb-2 rounded-lg px-4 py-2 text-left opacity-75  text-2xl text-white  hover:opacity-100 hover:bg-stone-700 transition-opacity";
 
@@ -14,7 +14,7 @@ export default function AsidePanel({isStart, projects, onSelectSideProject, sele
                             classes += 'opacity-100 bg-stone-700'
                         }
 
-                        return(<li className="mx-4" key={item.id}><button onClick={onSelectSideProject} className={classes}>{item.title}</button></li>)
+                        return(<li className="mx-4" key={item.id}><button id={item.id} onClick={onSelectSideProject} className={classes}>{item.title}</button></li>)
                     })
                     }
                 </ul>

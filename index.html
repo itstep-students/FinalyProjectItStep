@@ -5,10 +5,33 @@
     <link rel="icon" type="image/svg+xml" href="/logo.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>React Project Manager</title>
+    <style>
+      /*Scroll styles*/
+      ::-webkit-scrollbar{
+        width: 10px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: white;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: rgb(3 7 18);
+        border-radius: 20px;
+      }
+
+      ::-webkit-scrollbar-thumb:hover {
+        background: #333333;
+      }
+      ::-webkit-scrollbar-corner {
+        background: transparent;
+      }
+    </style>
   </head>
-  <body class="bg-stone-50">
+  <body class="bg-stone-50 flex flex-col h-full">
     <div id="modal-root"></div>
-    <div class="h-full flex pt-16" id="root"></div>
+    <div class="flex-grow"><div class="h-full flex pt-16" id="root"></div></div>
+
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
