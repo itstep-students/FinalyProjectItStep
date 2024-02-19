@@ -3,7 +3,7 @@ import {useState} from "react";
 export default function Project ({addProject, onCancel}) {
     const [styles, setStyles] = useState({title: false, description: false, date: false});
 
-    let descriptionStyles = 'resize-none h-32 font-sans text-lg font-medium border-solid border-b-4 border-stone-400 px-3 py-2 outline-none w-full h-10 bg-stone-300 focus:border-stone-600';
+    let descriptionStyles = 'resize-none h-32 font-sans text-lg font-medium border-solid border-b-4 px-3 py-2 outline-none w-full h-10 bg-stone-300 focus:border-stone-600';
     let titleStyles = 'font-sans text-lg font-medium border-solid border-b-4 px-3 py-2 outline-none w-full h-12 bg-stone-300 focus:border-stone-600';
     let dateStyles = 'font-sans text-lg font-medium border-solid border-b-4 px-3 py-2 outline-none w-full h-12 bg-stone-300 focus:border-stone-600';
 
@@ -18,7 +18,7 @@ export default function Project ({addProject, onCancel}) {
             setStyles((oldParam => {
                 return {...oldParam, title: false}
             }));
-        } else if (type === 'descr') {
+        } else if (type === 'description') {
             if (e.target.value.trim() === '') {
                 setStyles((oldParam => {
                     return {...oldParam, description: true}
@@ -88,7 +88,7 @@ export default function Project ({addProject, onCancel}) {
                      </div>
                      <div className="mb-6">
                          <label className="block mb-2 uppercase font-sans text-xl text-gray-600 font-medium" htmlFor="textarea">Description</label>
-                         <textarea onBlur={(e) => handleChange(e, 'descr')} name="text" className={styles.description ? descriptionStyles += ' border-red-700' : descriptionStyles += ' border-stone-400'} id="textarea"></textarea>
+                         <textarea onBlur={(e) => handleChange(e, 'description')} name="text" className={styles.description ? descriptionStyles += ' border-red-700' : descriptionStyles += ' border-stone-400'} id="textarea"></textarea>
                      </div>
                      <div>
                          <label className="block mb-2 uppercase font-sans text-xl text-gray-600 font-medium" htmlFor="input-date">Due date</label>

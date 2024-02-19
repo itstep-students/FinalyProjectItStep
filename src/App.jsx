@@ -4,6 +4,7 @@ import AsidePanel from "./assets/components/AsidePanel.jsx";
 import Project from "./assets/components/Project.jsx";
 import StartedPage from "./assets/components/StartedPage.jsx";
 import SideProject from "./assets/components/SideProject.jsx";
+import {options} from "./assets/components/dateOptions.js";
 
 function App() {
     const [isStartedProject, setStartedProject] = useState(true);
@@ -13,11 +14,16 @@ function App() {
         setStartedProject(false);
     }
 
-    function handleAddTask(taskText) {
+    function handleAddTask(task) {
         updateProjects(oldParam => {
+            let currentLang = 'en-US';
+
+            const formatDate = new Date(task.date).toLocaleDateString(currentLang, options);
             const newTask = {
-                text: taskText,
+                text: task.name,
                 id: Math.random(),
+                dueDateFormat: `${formatDate === 'Invalid Date' ? '—' : formatDate}`,
+                dueDate: task.date,
                 projectId: oldParam.selectedID
             }
             const newArrTasks = oldParam.projects.map(item => {
