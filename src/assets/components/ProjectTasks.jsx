@@ -1,6 +1,7 @@
 import NewTask from "./NewTask.jsx";
 
 import dateIcon from '/calendar.svg';
+import clockIcon from '/clock.svg';
 import {options} from "./dateOptions.js";
 
 const addToFavoriteIcon =  <svg width="32px" height="32px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -11,10 +12,16 @@ export default function ProjectTasks({onDelete, onAdd, tasksList}) {
 
     const formatDate = new Date().toLocaleDateString(currentLang, options);
 
-    let dateFlag = {color: ''};
+    let colorFlag = {date: '', time: ''};
     const currentMs = new Date().getTime();
 
     const ONE_WEEK_MS = 604800000;
+
+    function timeChecker(item) {
+        if (item.time === '—') {
+            colorFlag.time = ' text-gray-600';
+        }
+    }
 
     return (
         <div>
@@ -22,14 +29,18 @@ export default function ProjectTasks({onDelete, onAdd, tasksList}) {
             <NewTask onAdd={onAdd} />
             {tasksList.length === 0 && <p className="mb-4">No tasks yet</p>}
             {tasksList.length > 0 && <ul className="rounded-lg">{tasksList.map(item => {
-                const itemMs = new Date(item.dueDate).getTime();
-
+                let itemMs = new Date(item.dueDate).getTime();
                 if ((item.dueDateFormat === formatDate) || currentMs - itemMs >= 0) {
-                    dateFlag.color = ' text-red-600';
+                    colorFlag.date = ' text-red-600';
+                    colorFlag.time = ' text-red-600';
+                   timeChecker(item);
                 } else if (itemMs - currentMs <=  ONE_WEEK_MS) {
-                    dateFlag.color = ' text-green-600'
-                } else if ((itemMs - currentMs >  ONE_WEEK_MS)){
-                    dateFlag.color = ' text-gray-600'
+                    colorFlag.date = ' text-green-600';
+                    colorFlag.time = ' text-green-600';
+                    timeChecker(item);
+                } else if ((itemMs - currentMs >  ONE_WEEK_MS) || (item.dueDate === '')){
+                    colorFlag.date = ' text-gray-600';
+                    colorFlag.time = ' text-gray-600';
                 }
                return <li className="text-xl rounded-lg bg-stone-300 my-4 p-2" key={item.id}>
                     <div className="flex justify-between">
@@ -37,7 +48,14 @@ export default function ProjectTasks({onDelete, onAdd, tasksList}) {
                     <div className="flex"> <button onClick={() => onDelete(item.id)} className=" px-4 py-3 font-medium text-black font-sans hover:text-red-700 transition-colors">Clear</button>
                         <button className="">{addToFavoriteIcon}</button></div>
                     </div>
-                    <div className="font-bold flex gap-2"><img src={dateIcon} alt="date"/><span className={`font-medium ${dateFlag.color}`}>{item.dueDateFormat}</span></div>
+                   <div className="font-bold flex gap-5">
+                       <div className="flex justify-center items-center gap-2">
+                           <img src={dateIcon} alt="date"/><span className={`font-medium ${colorFlag.date}`}>{item.dueDateFormat}</span>
+                       </div>
+                       <div className="flex justify-center items-center gap-2">
+                           <img src={clockIcon} alt="date"/><span className={`font-medium ${colorFlag.time}`}>{item.time}</span>
+                       </div>
+                   </div>
                    </li>})}</ul>}
         </div>
     );

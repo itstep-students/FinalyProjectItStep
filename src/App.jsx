@@ -24,6 +24,7 @@ function App() {
                 id: Math.random(),
                 dueDateFormat: `${formatDate === 'Invalid Date' ? '—' : formatDate}`,
                 dueDate: task.date,
+                time: `${task.time === '' ? '—' : task.time}`,
                 projectId: oldParam.selectedID
             }
             const newArrTasks = oldParam.projects.map(item => {
