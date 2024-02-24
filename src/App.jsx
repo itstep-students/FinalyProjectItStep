@@ -78,6 +78,45 @@ function App() {
         })
     }
 
+    const selectedProject = projectsObj.projects.find(item => item.id === projectsObj.selectedID);
+    function handleAddFavorite(id) {
+        const task = selectedProject.tasks.find(item => item.id === id);
+        selectedProject.favoriteTasks = [task, ...selectedProject.favoriteTasks]
+        console.log(selectedProject.favoriteTasks)
+
+        updateProjects(oldParam => {
+            return {...oldParam}
+        })
+        handleDeleteTask(id)
+
+    }
+    function handleDeleteFavorite(id) {
+        updateProjects((oldParam) => {
+            const projectId = [oldParam.projects.find(item => item.id === oldParam.selectedID)][0].id
+            oldParam.projects.map(item => {
+                if (item.id === projectId) {
+                    const newArr = {...oldParam}.projects.find(item => item.id === oldParam.selectedID).favoriteTasks.filter(item => item.id !== id)
+                    item.favoriteTasks = newArr;
+                    return item;
+                }
+                return item;
+            });
+            return {
+                ...oldParam
+            }
+        })
+
+    }
+
+    function handleRemoveFromFavorite(id) {
+        handleDeleteFavorite(id);
+        const task = selectedProject.favoriteTasks.find(item => item.id === id);
+        selectedProject.tasks = [...selectedProject.tasks, task];
+        updateProjects(oldParam => {
+            return {...oldParam}
+        })
+    }
+
     function handleAddProject(dataObj) {
         updateProjects(oldParam => {
             const newProject = {
@@ -88,12 +127,12 @@ function App() {
         setStartedProject(true);
     }
 
-    const selectedProject = projectsObj.projects.find(item => item.id === projectsObj.selectedID);
+
 
   return (
     <>
       <AsidePanel selectedID={selectedProject && selectedProject.id} projects={projectsObj} isStart={handleStartedProject} onSelectSideProject={handleSelectSideProject}></AsidePanel>
-        {isStartedProject && !selectedProject ? <StartedPage isStart={handleStartedProject}></StartedPage> : selectedProject && isStartedProject ? <SideProject taskList={projectsObj.projects.find(item => item.id === projectsObj.selectedID).tasks} onAddTask={handleAddTask} onDeleteTask={handleDeleteTask} onDelete={handleDeleteProject} project={selectedProject}/> :
+        {isStartedProject && !selectedProject ? <StartedPage isStart={handleStartedProject}></StartedPage> : selectedProject && isStartedProject ? <SideProject remove={handleRemoveFromFavorite} handleDeleteFavorite={handleDeleteFavorite} onAddFavorite={handleAddFavorite} favoriteList={projectsObj.projects.find(item => item.id === projectsObj.selectedID).favoriteTasks} taskList={projectsObj.projects.find(item => item.id === projectsObj.selectedID).tasks} onAddTask={handleAddTask} onDeleteTask={handleDeleteTask} onDelete={handleDeleteProject} project={selectedProject}/> :
         <Project onCancel={(e) => handleCancelProject(e)} addProject={handleAddProject}/>}
     </>
   );

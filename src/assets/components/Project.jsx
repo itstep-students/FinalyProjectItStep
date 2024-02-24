@@ -52,7 +52,8 @@ export default function Project ({addProject, onCancel}) {
             text: formData.get('text'),
             date: formData.get('date'),
             id: Math.random(),
-            tasks: []
+            tasks: [],
+            favoriteTasks: []
         }
         if (formData.get('title').trim() === '' || formData.get('text').trim() === '' || formData.get('date').trim() === '') {
             if (formData.get('title').trim() === '') {
