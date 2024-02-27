@@ -45,7 +45,7 @@ export default function Project ({addProject, onCancel}) {
     function saveData(e) {
         e.preventDefault();
 
-        const formData = new FormData(document.querySelector('form'));
+        const formData = new FormData(document.querySelector('#project-form'));
 
         const dataObj = {
             title: formData.get('title'),
@@ -77,7 +77,7 @@ export default function Project ({addProject, onCancel}) {
     addProject(dataObj);
     }
     return (
-             <form onSubmit={(e) => saveData(e)} className="flex gap-8 flex-grow flex-col justify-center items-center mb-16">
+             <form id="project-form" onSubmit={saveData} className="flex gap-8 flex-grow flex-col justify-center items-center mb-16">
                  <div className="w-11/12 pl-14 pr-40">
                      <menu className="w-full text-end mb-8 flex justify-end">
                          <li><button onClick={onCancel} className="mr-4 px-4 py-3 text-xl font-medium text-black font-sans hover:text-red-700 transition-colors">Cancel</button></li>

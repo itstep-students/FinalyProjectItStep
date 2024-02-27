@@ -1,11 +1,10 @@
 import ProjectTasks from "./ProjectTasks.jsx";
 import {options} from "./dateOptions.js";
 
-export default function SideProject({project, onDelete, onDeleteTask, onAddTask, taskList, favoriteList, onAddFavorite, handleDeleteFavorite, remove}) {
+export default function SideProject({project, onDelete, onDeleteTask, onAddTask, taskList, favoriteList, onAddFavorite, handleDeleteFavorite, remove, onAddReminder, reminders}) {
     let currentLang = 'en-US';
 
     const formatDate = new Date(project.date).toLocaleDateString(currentLang, options);
-
 
     return (
         <div className="w-8/12 font-sans px-16 py-12">
@@ -18,7 +17,7 @@ export default function SideProject({project, onDelete, onDeleteTask, onAddTask,
                 <p className="w-full break-all text-xl py-4 border-solid border-b-2">{project.text}</p>
             </div>
 
-            <ProjectTasks remove={remove} handleDeleteFavorite={handleDeleteFavorite} onAddFavorite={onAddFavorite} favoriteList={favoriteList} tasksList={taskList} onAdd={onAddTask} onDelete={onDeleteTask} />
+            <ProjectTasks reminders={reminders} onAddReminder={onAddReminder} projectObj={project} remove={remove} handleDeleteFavorite={handleDeleteFavorite} onAddFavorite={onAddFavorite} favoriteList={favoriteList} tasksList={taskList} onAdd={onAddTask} onDelete={onDeleteTask} />
         </div>
     );
 }

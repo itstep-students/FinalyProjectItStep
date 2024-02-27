@@ -1,10 +1,8 @@
 export default function FavoriteIcon({onAddFavorite, remove, isFavorite}) {
     function handleChange() {
         if (isFavorite) {
-            console.log('del')
             remove();
         } else if (!isFavorite) {
-            console.log('add');
             onAddFavorite()
         }
 
