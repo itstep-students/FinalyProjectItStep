@@ -163,8 +163,11 @@ function App() {
         })
     }
 
-    function handleAddReminder(reminder) {
-        projectsObj.reminders.unshift(reminder);
+    function handleAddReminder(reminder, isSetReminder) {
+        if (!isSetReminder) {
+            projectsObj.reminders.unshift(reminder);
+        }
+
         updateProjects(oldParam => {
             return {...oldParam}
         })

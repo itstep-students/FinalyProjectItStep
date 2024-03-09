@@ -2,8 +2,8 @@ import remindersIcon from '/reminders.svg';
 import emptyReminders from '/empty-reminders.svg';
 import Reminder from "./Reminder.jsx";
 export default function RemindersList({list, open, reminders, onDeleteReminder})  {
-    const listOfReminders = <div className="w-80 h-[500px] bg-gray-300 rounded-lg font-sans text-gray-700 px-3 shadow-2xl ">
-        <p className="text-4xl font-medium text-center  border-gray-700 border-solid">Reminders</p>
+    const listOfReminders = <div className="w-80 h-[500px] bg-gray-300 rounded-lg font-sans text-gray-700 px-3 shadow-2xl animate-ping-modal">
+        <p className="text-4xl font-medium text-center">Reminders</p>
         <div className="w-64 h-1 bg-gray-700 rounded-xl mx-auto my-0 mb-2"></div>
         <ul className="flex overflow-auto py-1 px-1 flex-col gap-2 bg-stone-200 w-full h-5/6 rounded-lg border-4 border-solid border-gray-200">{reminders.map(reminder => <Reminder onDeleteReminder={onDeleteReminder} key={reminder.reminderId} reminder={reminder} />)}</ul>
     </div>;

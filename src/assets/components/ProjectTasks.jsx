@@ -19,8 +19,12 @@ export default function ProjectTasks({onDelete, onAdd, tasksList, favoriteList, 
 
     function handleOpenModal(task) {
         currentTask.task = task;
+        const isAlreadySetReminder = reminders.find(reminder => reminder.taskId === task.id);
         dialog.current.open();
 
+        if (isAlreadySetReminder) {
+            dialog.current.change();
+        }
     }
 
 
@@ -68,7 +72,7 @@ export default function ProjectTasks({onDelete, onAdd, tasksList, favoriteList, 
                     colorFlag.date = ' text-gray-600';
                     colorFlag.time = ' text-gray-600';
                 }
-               return <li className="text-xl rounded-lg bg-stone-300 my-4 p-2" key={item.id}>
+               return <li className="text-xl rounded-lg bg-stone-300 my-4 p-2 animate-ping-once" key={item.id}>
                     <div className="flex justify-between">
                     <span className="break-all mx-0 my-auto">{item.text}</span>
                     <div className="flex"> <button onClick={() => onDelete(item.id)} className="px-4 py-3 font-medium text-black font-sans hover:text-red-700 transition-colors">Clear</button>
