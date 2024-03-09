@@ -6,10 +6,15 @@ import StartedPage from "./assets/components/StartedPage.jsx";
 import SideProject from "./assets/components/SideProject.jsx";
 import {options} from "./assets/components/dateOptions.js";
 import RemindersList from "./assets/components/RemindersList.jsx";
+import LanguagesSelect from "./assets/components/LanguagesSelect.jsx";
 
 function App() {
     const [isStartedProject, setStartedProject] = useState(true);
-    const [projectsObj, updateProjects] = useState({projects: [], selectedID: null, reminders: []});
+    const [projectsObj, updateProjects] = useState({
+        projects: JSON.parse(localStorage.getItem('projects')) || [],
+        selectedID: null,
+        reminders: []
+    });
     const [reminders, setReminders] = useState({isOpen: false, remindersList: []});
 
 
@@ -21,6 +26,7 @@ function App() {
             }
         });
     }
+
     function handleStartedProject() {
         setStartedProject(false);
     }
@@ -50,8 +56,9 @@ function App() {
             //     projects: updatedProjects
             // };
 
-            const indexProject = oldParam.projects.findIndex(project=>project.id===oldParam.selectedID);
+            const indexProject = oldParam.projects.findIndex(project => project.id === oldParam.selectedID);
             oldParam.projects[indexProject].tasks.unshift(newTask);
+            localStorage.setItem('projects', JSON.stringify(oldParam.projects));
             return {
                 ...oldParam,
             }
@@ -84,9 +91,8 @@ function App() {
                 }
                 return project;
             });
-
+            localStorage.setItem('projects', JSON.stringify(updatedProjects));
             const updatedReminders = oldParam.reminders.filter(reminder => reminder.taskId !== id);
-
             return {
                 ...oldParam,
                 projects: updatedProjects,
@@ -105,28 +111,33 @@ function App() {
         e.preventDefault()
         setStartedProject(true);
     }
+
     function handleDeleteProject() {
         updateProjects((oldParam) => {
+            const updateProject = oldParam.projects.filter((item) => item.id !== oldParam.selectedID);
+            localStorage.setItem('projects', JSON.stringify(updateProject));
             return {
                 ...oldParam,
                 selectedID: null,
-                projects: oldParam.projects.filter((item) => item.id !== oldParam.selectedID),
+                projects: updateProject,
                 reminders: oldParam.reminders.filter(reminder => reminder.projectId !== oldParam.selectedID)
             }
         })
     }
 
     const selectedProject = projectsObj.projects.find(item => item.id === projectsObj.selectedID);
+
     function handleAddFavorite(id) {
         const task = selectedProject.tasks.find(item => item.id === id);
         selectedProject.favoriteTasks = [task, ...selectedProject.favoriteTasks];
-
         updateProjects(oldParam => {
+            localStorage.setItem('projects', JSON.stringify(oldParam.projects));
             return {...oldParam}
         })
         handleDeleteTask(id, true)
 
     }
+
     function handleDeleteFavorite(id, isReminder) {
         if (isReminder) {
             updateProjects((oldParam) => {
@@ -146,8 +157,8 @@ function App() {
             return;
         }
         updateProjects((oldParam) => {
-            const projectId = [oldParam.projects.find(item => item.id === oldParam.selectedID)][0].id
             oldParam.projects.map(item => {
+                const projectId = [oldParam.projects.find(item => item.id === oldParam.selectedID)][0].id;
                 if (item.id === projectId) {
                     const newArr = {...oldParam}.projects.find(item => item.id === oldParam.selectedID).favoriteTasks.filter(item => item.id !== id)
                     item.favoriteTasks = newArr;
@@ -167,7 +178,6 @@ function App() {
         if (!isSetReminder) {
             projectsObj.reminders.unshift(reminder);
         }
-
         updateProjects(oldParam => {
             return {...oldParam}
         })
@@ -183,43 +193,56 @@ function App() {
     }
 
     function handleRemoveFromFavorite(id) {
-        handleDeleteFavorite(id,true);
+        handleDeleteFavorite(id, true);
         const task = selectedProject.favoriteTasks.find(item => item.id === id);
         selectedProject.tasks = [...selectedProject.tasks, task];
         updateProjects(oldParam => {
+            localStorage.setItem('projects', JSON.stringify(oldParam.projects));
             return {...oldParam}
         })
     }
 
     function handleAddProject(dataObj) {
         updateProjects(oldParam => {
+            const updatedProjects = [
+                ...oldParam.projects,
+                {...dataObj}
+            ];
+            localStorage.setItem('projects', JSON.stringify(updatedProjects));
             const newProject = {
                 ...dataObj
             }
-            return {...oldParam, selectedID: newProject.id, projects: [...oldParam.projects, newProject]};
+            return {...oldParam, selectedID: newProject.id, projects: updatedProjects};
         })
         setStartedProject(true);
     }
 
     let projectContent;
 
-    if(isStartedProject && !selectedProject){
-        projectContent= <StartedPage isStart={handleStartedProject} />;
-    } else if ( selectedProject && isStartedProject){
+    if (isStartedProject && !selectedProject) {
+        projectContent = <StartedPage isStart={handleStartedProject}/>;
+    } else if (selectedProject && isStartedProject) {
         const currentList = projectsObj.projects.find(item => item.id === projectsObj.selectedID);
-        projectContent= <SideProject reminders={projectsObj.reminders} onAddReminder={handleAddReminder} remove={handleRemoveFromFavorite} handleDeleteFavorite={handleDeleteFavorite} onAddFavorite={handleAddFavorite} favoriteList={currentList.favoriteTasks} taskList={currentList.tasks} onAddTask={handleAddTask} onDeleteTask={handleDeleteTask} onDelete={handleDeleteProject} project={selectedProject}/>
+        projectContent = <SideProject reminders={projectsObj.reminders} onAddReminder={handleAddReminder}
+                                      remove={handleRemoveFromFavorite} handleDeleteFavorite={handleDeleteFavorite}
+                                      onAddFavorite={handleAddFavorite} favoriteList={currentList.favoriteTasks}
+                                      taskList={currentList.tasks} onAddTask={handleAddTask}
+                                      onDeleteTask={handleDeleteTask} onDelete={handleDeleteProject}
+                                      project={selectedProject}/>
     } else {
-        projectContent= <Project onCancel={(e) => handleCancelProject(e)} addProject={handleAddProject}/>
+        projectContent = <Project onCancel={(e) => handleCancelProject(e)} addProject={handleAddProject}/>
     }
 
-  return (
-    <>
-
-      <AsidePanel selectedID={selectedProject && selectedProject.id} projects={projectsObj} isStart={handleStartedProject} onSelectSideProject={handleSelectSideProject}></AsidePanel>
-        {projectContent}
-        <RemindersList onDeleteReminder={handleDeleteReminder} reminders={projectsObj.reminders} list={reminders.isOpen} open={handleOpenReminders} />
-    </>
-  );
+    return (
+        <>
+            <AsidePanel selectedID={selectedProject && selectedProject.id} projects={projectsObj}
+                        isStart={handleStartedProject} onSelectSideProject={handleSelectSideProject}></AsidePanel>
+            {projectContent}
+            <RemindersList onDeleteReminder={handleDeleteReminder} reminders={projectsObj.reminders}
+                           list={reminders.isOpen} open={handleOpenReminders}/>
+            <LanguagesSelect />
+        </>
+    );
 }
 
 export default App;
