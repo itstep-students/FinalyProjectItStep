@@ -53,7 +53,7 @@ function App() {
 
             const indexProject = oldParam.projects.findIndex(project=>project.id===oldParam.selectedID);
             oldParam.projects[indexProject].tasks.unshift(newTask);
-            localStorage.setItem('projects', JSON.stringify(oldParam))
+            localStorage.setItem('projects', JSON.stringify(oldParam.projects))
             return {
                 ...oldParam,
             }
