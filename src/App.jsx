@@ -9,7 +9,7 @@ import Reminders from "./assets/components/Reminders.jsx";
 
 function App() {
     const [isStartedProject, setStartedProject] = useState(true);
-    const [projectsObj, updateProjects] = useState({projects: [], selectedID: null, reminders: []});
+    const [projectsObj, updateProjects] = useState({projects: JSON.parse(localStorage.getItem('projects')) || [], selectedID: null, reminders: []});
     const [reminders, setReminders] = useState({isOpen: false, remindersList: []});
 
 
@@ -50,8 +50,10 @@ function App() {
             //     projects: updatedProjects
             // };
 
+
             const indexProject = oldParam.projects.findIndex(project=>project.id===oldParam.selectedID);
             oldParam.projects[indexProject].tasks.unshift(newTask);
+            localStorage.setItem('projects', JSON.stringify(oldParam))
             return {
                 ...oldParam,
             }
@@ -68,6 +70,7 @@ function App() {
                 }
                 return project;
             });
+            localStorage.setItem('projects', JSON.stringify(updatedProjects));
             return {
                 ...oldParam,
                 projects: updatedProjects
@@ -87,10 +90,12 @@ function App() {
     }
     function handleDeleteProject() {
         updateProjects((oldParam) => {
+            const updatedProjects = oldParam.projects.filter((item) => item.id !== oldParam.selectedID);
+            localStorage.setItem('projects', JSON.stringify(updatedProjects));
             return {
                 ...oldParam,
                 selectedID: null,
-                projects: oldParam.projects.filter((item) => item.id !== oldParam.selectedID)
+                projects:  updatedProjects
             }
         })
     }
@@ -99,7 +104,6 @@ function App() {
     function handleAddFavorite(id) {
         const task = selectedProject.tasks.find(item => item.id === id);
         selectedProject.favoriteTasks = [task, ...selectedProject.favoriteTasks];
-
         updateProjects(oldParam => {
             return {...oldParam}
         })
@@ -113,6 +117,7 @@ function App() {
                 if (item.id === projectId) {
                     const newArr = {...oldParam}.projects.find(item => item.id === oldParam.selectedID).favoriteTasks.filter(item => item.id !== id)
                     item.favoriteTasks = newArr;
+                    localStorage.setItem('projects', JSON.stringify(item));
                     return item;
                 }
                 return item;
@@ -141,10 +146,15 @@ function App() {
 
     function handleAddProject(dataObj) {
         updateProjects(oldParam => {
+            const updatedProjects = [
+                ...oldParam.projects,
+                {...dataObj}
+            ];
+            localStorage.setItem('projects', JSON.stringify(updatedProjects))
             const newProject = {
                 ...dataObj
             }
-            return {...oldParam, selectedID: newProject.id, projects: [...oldParam.projects, newProject]};
+            return {...oldParam, selectedID: newProject.id, projects: updatedProjects};
         })
         setStartedProject(true);
     }
