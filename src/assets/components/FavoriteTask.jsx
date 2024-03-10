@@ -59,7 +59,7 @@ export default function FavoriteTask({favorite, onAddFavorite, handleDeleteFavor
                     colorFlag.date = ' text-gray-600';
                     colorFlag.time = ' text-gray-600';
                 }
-                return <li className="text-xl rounded-lg bg-stone-300 my-4 p-2 outline-4 outline-none outline-yellow-500 outline-offset-[inherit] animate-ping-once" key={item.id}>
+                return <li className="text-xl rounded-lg bg-stone-300 my-4 p-2 outline-4 outline-none outline-yellow-500 outline-offset-[inherit] animate-ping-once shadow-xl" key={item.id}>
                     <div className="flex justify-between">
                         <span className="break-all mx-0 my-auto">{item.text}</span>
                         <div className="flex"> <button onClick={() => handleDeleteFavorite(item.id)} className=" px-4 py-3 font-medium text-black font-sans hover:text-red-700 transition-colors">Clear</button>

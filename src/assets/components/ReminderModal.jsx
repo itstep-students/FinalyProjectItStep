@@ -129,7 +129,7 @@ const ReminderModal = forwardRef(function ReminderModal({currentTask, projectObj
                 </div>
 
                 <form method="dialog" className="flex justify-center">
-                    <button onClick={handleSaveReminder} className="rounded-lg w-32 mx-auto my-0 opacity-75 px-6 py-3 bg-stone-950 text-xl text-white font-sans hover:opacity-85 transition-opacity"
+                    <button onClick={handleSaveReminder} className="rounded-lg w-32 mx-auto my-0 opacity-75 px-6 py-3 bg-stone-800 text-xl text-white font-sans hover:opacity-85 transition-opacity"
                     >{changeReminder ? 'Change' : 'Save'}</button>
                 </form>
 

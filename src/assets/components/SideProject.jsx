@@ -13,8 +13,8 @@ export default function SideProject({project, onDelete, onDeleteTask, onAddTask,
                     <h2 className="text-5xl font-bold my-4 break-all w-full">{project.title}</h2>
                     <button onClick={onDelete} className="mr-4 px-4 py-3 text-xl font-medium text-black font-sans hover:text-red-700 transition-colors">Delete</button>
                 </div>
-                <p className="text-2xl text-stone-500 mb-6">{formatDate}</p>
-                <p className="w-full break-all text-xl py-4 border-solid border-b-2">{project.text}</p>
+                <p className="text-2xl text-gray-600 mb-6">{formatDate}</p>
+                <p className="w-full text-black break-all text-xl py-4 border-solid border-b-2">{project.text}</p>
             </div>
 
             <ProjectTasks reminders={reminders} onAddReminder={onAddReminder} projectObj={project} remove={remove} handleDeleteFavorite={handleDeleteFavorite} onAddFavorite={onAddFavorite} favoriteList={favoriteList} tasksList={taskList} onAdd={onAddTask} onDelete={onDeleteTask} />
