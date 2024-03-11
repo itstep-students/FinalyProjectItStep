@@ -201,13 +201,23 @@ function App() {
         setStartedProject(true);
     }
 
+    let projectContent;
 
+    if(isStartedProject && !selectedProject){
+        projectContent= <StartedPage isStart={handleStartedProject} />;
+    } else if ( selectedProject && isStartedProject){
+        const favoriteTasks = projectsObj.projects.find(item => item.id === projectsObj.selectedID).favoriteTasks;
+        const tasksList = projectsObj.projects.find(item => item.id === projectsObj.selectedID).tasks;
+        projectContent= <SideProject reminders={projectsObj.reminders} onAddReminder={handleAddReminder} remove={handleRemoveFromFavorite} handleDeleteFavorite={handleDeleteFavorite} onAddFavorite={handleAddFavorite} favoriteList={favoriteTasks} taskList={tasksList} onAddTask={handleAddTask} onDeleteTask={handleDeleteTask} onDelete={handleDeleteProject} project={selectedProject}/>
+    } else {
+        projectContent= <Project onCancel={(e) => handleCancelProject(e)} addProject={handleAddProject}/>
+    }
 
   return (
     <>
+
       <AsidePanel selectedID={selectedProject && selectedProject.id} projects={projectsObj} isStart={handleStartedProject} onSelectSideProject={handleSelectSideProject}></AsidePanel>
-        {isStartedProject && !selectedProject ? <StartedPage isStart={handleStartedProject}></StartedPage> : selectedProject && isStartedProject ? <SideProject reminders={projectsObj.reminders} onAddReminder={handleAddReminder} remove={handleRemoveFromFavorite} handleDeleteFavorite={handleDeleteFavorite} onAddFavorite={handleAddFavorite} favoriteList={projectsObj.projects.find(item => item.id === projectsObj.selectedID).favoriteTasks} taskList={projectsObj.projects.find(item => item.id === projectsObj.selectedID).tasks} onAddTask={handleAddTask} onDeleteTask={handleDeleteTask} onDelete={handleDeleteProject} project={selectedProject}/> :
-        <Project onCancel={(e) => handleCancelProject(e)} addProject={handleAddProject}/>}
+        {projectContent}
         <RemindersList onDeleteReminder={handleDeleteReminder} reminders={projectsObj.reminders} list={reminders.isOpen} open={handleOpenReminders} />
     </>
   );
