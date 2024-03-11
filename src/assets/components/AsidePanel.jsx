@@ -8,7 +8,7 @@ export default function AsidePanel({isStart, projects, onSelectSideProject, sele
                 </div>
                 <ul className="my-6">
                     {projects.projects.map(project => {
-                        let classes = "w-full overflow-hidden whitespace-nowrap text-ellipsis mb-2 rounded-lg px-4 py-2 text-left opacity-75  text-2xl text-white  hover:opacity-100 hover:bg-stone-700 transition-opacity";
+                        let classes = "w-full overflow-hidden whitespace-nowrap text-ellipsis mb-2 rounded-lg px-4 py-2 text-left opacity-75 animate-ping-once text-2xl text-white  hover:opacity-100 hover:bg-stone-700 transition-opacity";
 
                         if (project.id === selectedID) {
                             classes += 'opacity-100 bg-stone-700'

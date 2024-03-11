@@ -5,7 +5,7 @@ import Project from "./assets/components/Project.jsx";
 import StartedPage from "./assets/components/StartedPage.jsx";
 import SideProject from "./assets/components/SideProject.jsx";
 import {options} from "./assets/components/dateOptions.js";
-import Reminders from "./assets/components/Reminders.jsx";
+import RemindersList from "./assets/components/RemindersList.jsx";
 
 function App() {
     const [isStartedProject, setStartedProject] = useState(true);
@@ -59,18 +59,38 @@ function App() {
         setStartedProject(true);
     }
 
-    function handleDeleteTask(id) {
+    function handleDeleteTask(id, isFavorite) {
+        if (isFavorite) {
+            updateProjects((oldParam) => {
+                const updatedProjects = oldParam.projects.map(project => {
+                    if (project.id === oldParam.selectedID) {
+                        const updatedTasks = project.tasks.filter(task => task.id !== id)
+                        project.tasks = updatedTasks;
+                    }
+                    return project;
+                });
+                return {
+                    ...oldParam,
+                    projects: updatedProjects,
+                }
+            })
+            return
+        }
         updateProjects((oldParam) => {
-            const updatedProjects =oldParam.projects.map(project => {
+            const updatedProjects = oldParam.projects.map(project => {
                 if (project.id === oldParam.selectedID) {
                     const updatedTasks = project.tasks.filter(task => task.id !== id)
                     project.tasks = updatedTasks;
                 }
                 return project;
             });
+
+            const updatedReminders = oldParam.reminders.filter(reminder => reminder.taskId !== id);
+
             return {
                 ...oldParam,
-                projects: updatedProjects
+                projects: updatedProjects,
+                reminders: updatedReminders
             }
         })
     }
@@ -90,7 +110,8 @@ function App() {
             return {
                 ...oldParam,
                 selectedID: null,
-                projects: oldParam.projects.filter((item) => item.id !== oldParam.selectedID)
+                projects: oldParam.projects.filter((item) => item.id !== oldParam.selectedID),
+                reminders: oldParam.reminders.filter(reminder => reminder.projectId !== oldParam.selectedID)
             }
         })
     }
@@ -103,10 +124,27 @@ function App() {
         updateProjects(oldParam => {
             return {...oldParam}
         })
-        handleDeleteTask(id)
+        handleDeleteTask(id, true)
 
     }
-    function handleDeleteFavorite(id) {
+    function handleDeleteFavorite(id, isReminder) {
+        if (isReminder) {
+            updateProjects((oldParam) => {
+                const projectId = [oldParam.projects.find(item => item.id === oldParam.selectedID)][0].id
+                oldParam.projects.map(item => {
+                    if (item.id === projectId) {
+                        const newArr = {...oldParam}.projects.find(item => item.id === oldParam.selectedID).favoriteTasks.filter(item => item.id !== id)
+                        item.favoriteTasks = newArr;
+                        return item;
+                    }
+                    return item;
+                });
+                return {
+                    ...oldParam
+                }
+            })
+            return;
+        }
         updateProjects((oldParam) => {
             const projectId = [oldParam.projects.find(item => item.id === oldParam.selectedID)][0].id
             oldParam.projects.map(item => {
@@ -117,21 +155,35 @@ function App() {
                 }
                 return item;
             });
+            const updatedReminders = oldParam.reminders.filter(reminder => reminder.taskId !== id);
             return {
-                ...oldParam
+                ...oldParam,
+                reminders: updatedReminders
             }
         })
     }
 
-    function handleAddReminder(reminder) {
-        projectsObj.reminders.unshift(reminder);
+    function handleAddReminder(reminder, isSetReminder) {
+        if (!isSetReminder) {
+            projectsObj.reminders.unshift(reminder);
+        }
+
         updateProjects(oldParam => {
             return {...oldParam}
         })
     }
 
+    function handleDeleteReminder(id) {
+        updateProjects(oldParam => {
+            return {
+                ...oldParam,
+                reminders: oldParam.reminders.filter(reminder => reminder.reminderId !== id)
+            }
+        })
+    }
+
     function handleRemoveFromFavorite(id) {
-        handleDeleteFavorite(id);
+        handleDeleteFavorite(id,true);
         const task = selectedProject.favoriteTasks.find(item => item.id === id);
         selectedProject.tasks = [...selectedProject.tasks, task];
         updateProjects(oldParam => {
@@ -149,14 +201,24 @@ function App() {
         setStartedProject(true);
     }
 
+    let projectContent;
 
+    if(isStartedProject && !selectedProject){
+        projectContent= <StartedPage isStart={handleStartedProject} />;
+    } else if ( selectedProject && isStartedProject){
+        const favoriteTasks = projectsObj.projects.find(item => item.id === projectsObj.selectedID).favoriteTasks;
+        const tasksList = projectsObj.projects.find(item => item.id === projectsObj.selectedID).tasks;
+        projectContent= <SideProject reminders={projectsObj.reminders} onAddReminder={handleAddReminder} remove={handleRemoveFromFavorite} handleDeleteFavorite={handleDeleteFavorite} onAddFavorite={handleAddFavorite} favoriteList={favoriteTasks} taskList={tasksList} onAddTask={handleAddTask} onDeleteTask={handleDeleteTask} onDelete={handleDeleteProject} project={selectedProject}/>
+    } else {
+        projectContent= <Project onCancel={(e) => handleCancelProject(e)} addProject={handleAddProject}/>
+    }
 
   return (
     <>
+
       <AsidePanel selectedID={selectedProject && selectedProject.id} projects={projectsObj} isStart={handleStartedProject} onSelectSideProject={handleSelectSideProject}></AsidePanel>
-        {isStartedProject && !selectedProject ? <StartedPage isStart={handleStartedProject}></StartedPage> : selectedProject && isStartedProject ? <SideProject reminders={projectsObj.reminders} onAddReminder={handleAddReminder} remove={handleRemoveFromFavorite} handleDeleteFavorite={handleDeleteFavorite} onAddFavorite={handleAddFavorite} favoriteList={projectsObj.projects.find(item => item.id === projectsObj.selectedID).favoriteTasks} taskList={projectsObj.projects.find(item => item.id === projectsObj.selectedID).tasks} onAddTask={handleAddTask} onDeleteTask={handleDeleteTask} onDelete={handleDeleteProject} project={selectedProject}/> :
-        <Project onCancel={(e) => handleCancelProject(e)} addProject={handleAddProject}/>}
-        <Reminders list={reminders.isOpen} open={handleOpenReminders} />
+        {projectContent}
+        <RemindersList onDeleteReminder={handleDeleteReminder} reminders={projectsObj.reminders} list={reminders.isOpen} open={handleOpenReminders} />
     </>
   );
 }
