@@ -206,9 +206,8 @@ function App() {
     if(isStartedProject && !selectedProject){
         projectContent= <StartedPage isStart={handleStartedProject} />;
     } else if ( selectedProject && isStartedProject){
-        const favoriteTasks = projectsObj.projects.find(item => item.id === projectsObj.selectedID).favoriteTasks;
-        const tasksList = projectsObj.projects.find(item => item.id === projectsObj.selectedID).tasks;
-        projectContent= <SideProject reminders={projectsObj.reminders} onAddReminder={handleAddReminder} remove={handleRemoveFromFavorite} handleDeleteFavorite={handleDeleteFavorite} onAddFavorite={handleAddFavorite} favoriteList={favoriteTasks} taskList={tasksList} onAddTask={handleAddTask} onDeleteTask={handleDeleteTask} onDelete={handleDeleteProject} project={selectedProject}/>
+        const currentList = projectsObj.projects.find(item => item.id === projectsObj.selectedID);
+        projectContent= <SideProject reminders={projectsObj.reminders} onAddReminder={handleAddReminder} remove={handleRemoveFromFavorite} handleDeleteFavorite={handleDeleteFavorite} onAddFavorite={handleAddFavorite} favoriteList={currentList.favoriteTasks} taskList={currentList.tasks} onAddTask={handleAddTask} onDeleteTask={handleDeleteTask} onDelete={handleDeleteProject} project={selectedProject}/>
     } else {
         projectContent= <Project onCancel={(e) => handleCancelProject(e)} addProject={handleAddProject}/>
     }
