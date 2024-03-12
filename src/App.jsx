@@ -6,14 +6,17 @@ import StartedPage from "./assets/components/StartedPage.jsx";
 import SideProject from "./assets/components/SideProject.jsx";
 import {options} from "./assets/components/dateOptions.js";
 import RemindersList from "./assets/components/RemindersList.jsx";
+import {languages} from "./assets/components/languages.js";
 
 function App() {
   const [isStartedProject, setStartedProject] = useState(true);
   const [projectsObj, updateProjects] = useState({
     projects: JSON.parse(localStorage.getItem('projects')) || [],
     selectedID: null,
-    reminders: []
+    reminders: [],
+    language: "en"
   });
+  const currentLanguage = languages.find(item=>item.lang===projectsObj.language);
   const [reminders, setReminders] = useState({isOpen: false, remindersList: []});
   
   
