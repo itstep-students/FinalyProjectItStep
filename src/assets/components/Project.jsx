@@ -1,11 +1,13 @@
-import {useState} from "react";
+import {useState, useRef} from "react";
 
 export default function Project ({addProject, onCancel}) {
     const [styles, setStyles] = useState({title: false, description: false, date: false});
 
-    let descriptionStyles = 'resize-none h-32 font-sans text-lg font-medium border-solid border-b-4 px-3 py-2 outline-none w-full h-10 bg-stone-300 focus:border-stone-600';
-    let titleStyles = 'font-sans text-lg font-medium border-solid border-b-4 px-3 py-2 outline-none w-full h-12 bg-stone-300 focus:border-stone-600';
-    let dateStyles = 'font-sans text-lg font-medium border-solid border-b-4 px-3 py-2 outline-none w-full h-12 bg-stone-300 focus:border-stone-600';
+    const formRef = useRef();
+
+    let descriptionStyles = 'resize-none h-32 font-sans text-lg font-medium border-solid border-b-4 px-3 py-2 outline-none w-full h-10 bg-stone-300 focus:border-stone-600 rounded-lg';
+    let titleStyles = 'font-sans  text-lg font-medium border-solid border-b-4 px-3 py-2 outline-none w-full h-12 bg-stone-300 focus:border-stone-600 rounded-lg';
+    let dateStyles = 'font-sans text-lg font-medium border-solid border-b-4 px-3 py-2 outline-none w-full h-12 bg-stone-300 focus:border-stone-600 rounded-lg';
 
     function handleChange(e, type) {
         if (type === 'title') {
@@ -45,7 +47,7 @@ export default function Project ({addProject, onCancel}) {
     function saveData(e) {
         e.preventDefault();
 
-        const formData = new FormData(document.querySelector('#project-form'));
+        const formData = new FormData(formRef.current);
 
         const dataObj = {
             title: formData.get('title'),
@@ -77,11 +79,11 @@ export default function Project ({addProject, onCancel}) {
     addProject(dataObj);
     }
     return (
-             <form id="project-form" onSubmit={saveData} className="flex gap-8 flex-grow flex-col justify-center items-center mb-16">
+             <form ref={formRef} onSubmit={saveData} className="flex gap-8 flex-grow flex-col justify-center items-center mb-16">
                  <div className="w-11/12 pl-14 pr-40">
                      <menu className="w-full text-end mb-8 flex justify-end">
-                         <li><button onClick={onCancel} className="mr-4 px-4 py-3 text-xl font-medium text-black font-sans hover:text-red-700 transition-colors">Cancel</button></li>
-                         <li><button className="rounded-lg opacity-100 px-8 py-3 bg-black text-xl text-white font-sans hover:opacity-80 transition-opacity">Save</button></li>
+                         <li><button onClick={onCancel} className="mr-4  px-4 py-3 text-xl font-medium text-black font-sans hover:text-red-700 transition-colors">Cancel</button></li>
+                         <li><button className="rounded-lg opacity-85 px-8 py-3 bg-stone-600 text-xl text-white font-sans hover:opacity-100 transition-opacity">Save</button></li>
                      </menu>
                      <div className="mb-6">
                          <label className="block mb-2 uppercase font-sans text-xl text-gray-600 font-medium" htmlFor="input-text">Title</label>

@@ -15,9 +15,18 @@ import ReminderModal from "./ReminderModal.jsx";
 export default function ProjectTasks({onDelete, onAdd, tasksList, favoriteList, onAddFavorite, handleDeleteFavorite, remove, projectObj, onAddReminder, reminders}) {
 
     const dialog = useRef();
-    function handleOpenModal() {
+    const currentTask= {task: ''};
+
+    function handleOpenModal(task) {
+        currentTask.task = task;
+        const isAlreadySetReminder = reminders.find(reminder => reminder.taskId === task.id);
         dialog.current.open();
+
+        if (isAlreadySetReminder) {
+            dialog.current.change();
+        }
     }
+
 
     let currentLang = 'en-US';
 
@@ -40,7 +49,7 @@ export default function ProjectTasks({onDelete, onAdd, tasksList, favoriteList, 
             <h2 className="text-3xl font-bold mb-4">Tasks</h2>
             <NewTask onAdd={onAdd} />
             {(tasksList.length === 0 && favoriteList.length === 0) && <p className="mb-4">No tasks yet</p>}
-            <FavoriteTask remove={remove} handleDeleteFavorite={handleDeleteFavorite} onAddFavorite={onAddFavorite} favorite={favoriteList}/>
+            <FavoriteTask reminders={reminders} onAddReminder={onAddReminder} projectObj={projectObj} remove={remove} handleDeleteFavorite={handleDeleteFavorite} onAddFavorite={onAddFavorite} favorite={favoriteList}/>
             {tasksList.length > 0 && <ul className="rounded-lg">{tasksList.map(item => {
                 let itemMs = new Date(item.dueDate).getTime();
                 let reminder;
@@ -63,8 +72,7 @@ export default function ProjectTasks({onDelete, onAdd, tasksList, favoriteList, 
                     colorFlag.date = ' text-gray-600';
                     colorFlag.time = ' text-gray-600';
                 }
-                console.log(reminderDate === 'Invalid Date')
-               return <li className="text-xl rounded-lg bg-stone-300 my-4 p-2" key={item.id}>
+               return <li className="text-xl rounded-lg bg-stone-300 my-4 p-2 animate-ping-once shadow-xl" key={item.id}>
                     <div className="flex justify-between">
                     <span className="break-all mx-0 my-auto">{item.text}</span>
                     <div className="flex"> <button onClick={() => onDelete(item.id)} className="px-4 py-3 font-medium text-black font-sans hover:text-red-700 transition-colors">Clear</button>
@@ -82,10 +90,10 @@ export default function ProjectTasks({onDelete, onAdd, tasksList, favoriteList, 
                        </div>
 
                        <div className="flex justify-center items-center gap-2">
-                           <span className='font-medium'>{(reminderDate === 'Invalid Date' ? '' : reminderDate) || ''}{` ${reminderTime || ''}`}</span> <img onClick={handleOpenModal} className="w-6 h-6 cursor-pointer hover:opacity-80 transition-opacity" src={reminderIcon} alt="reminder"/>
-                           <ReminderModal reminders={reminders} onAddReminder={onAddReminder} projectObj={projectObj} task={item} ref={dialog} />
+                           <span className='font-medium'>{(reminderDate === 'Invalid Date' ? '' : reminderDate) || ''}{` ${reminderTime || ''}`}</span> <img onClick={() => handleOpenModal(item)} className="w-6 h-6 cursor-pointer hover:opacity-80 transition-opacity" src={reminderIcon} alt="reminder"/>
                        </div>
                    </div>
+                   <ReminderModal reminders={reminders} onAddReminder={onAddReminder} projectObj={projectObj} currentTask={currentTask} ref={dialog} />
                    </li>})}</ul>}
         </div>
     );
