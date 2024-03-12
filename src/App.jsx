@@ -13,7 +13,7 @@ function App() {
   const [projectsObj, updateProjects] = useState({
     projects: JSON.parse(localStorage.getItem('projects')) || [],
     selectedID: null,
-    reminders: []
+    reminders: JSON.parse(localStorage.getItem('reminders')) || [],
   });
   const [reminders, setReminders] = useState({isOpen: false, remindersList: []});
   
@@ -158,7 +158,7 @@ function App() {
     if (!isSetReminder) {
       projectsObj.reminders.unshift(reminder);
     }
-    
+    localStorage.setItem('reminders', JSON.stringify(projectsObj.reminders));
     updateProjects(oldParam => {
       return {...oldParam}
     })
