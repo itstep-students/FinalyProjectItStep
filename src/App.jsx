@@ -6,6 +6,7 @@ import StartedPage from "./assets/components/StartedPage.jsx";
 import SideProject from "./assets/components/SideProject.jsx";
 import {options} from "./assets/components/dateOptions.js";
 import RemindersList from "./assets/components/RemindersList.jsx";
+import LanguagesSelect from "./assets/components/LanguagesSelect.jsx";
 
 function App() {
   const [isStartedProject, setStartedProject] = useState(true);
@@ -122,6 +123,7 @@ function App() {
     selectedProject.favoriteTasks = [task, ...selectedProject.favoriteTasks];
     
     updateProjects(oldParam => {
+      localStorage.setItem('projects', JSON.stringify(oldParam.projects));
       return {...oldParam}
     })
     handleDeleteTask(id, true)
@@ -137,7 +139,7 @@ function App() {
         if (item.id === projectId) {
           const newArr = {...oldParam}.projects.find(item => item.id === oldParam.selectedID).favoriteTasks.filter(item => item.id !== id)
           item.favoriteTasks = newArr;
-          localStorage.setItem('projects', JSON.stringify(item));
+         // localStorage.setItem('projects', JSON.stringify(item));
         }
         return item;
       });
@@ -176,6 +178,7 @@ function App() {
     const task = selectedProject.favoriteTasks.find(item => item.id === id);
     selectedProject.tasks = [...selectedProject.tasks, task];
     updateProjects(oldParam => {
+      localStorage.setItem('projects', JSON.stringify(oldParam.projects));
       return {...oldParam}
     })
   }
@@ -205,12 +208,14 @@ function App() {
     } else {
         projectContent= <Project onCancel={(e) => handleCancelProject(e)} addProject={handleAddProject}/>
     }
+
   return (
     <>
-      <AsidePanel selectedID={selectedProject && selectedProject.id} projects={projectsObj}
-                  isStart={handleStartedProject} onSelectSideProject={handleSelectSideProject}></AsidePanel>
+
+      <AsidePanel selectedID={selectedProject && selectedProject.id} projects={projectsObj} isStart={handleStartedProject} onSelectSideProject={handleSelectSideProject}></AsidePanel>
         {projectContent}
         <RemindersList onDeleteReminder={handleDeleteReminder} reminders={projectsObj.reminders} list={reminders.isOpen} open={handleOpenReminders} />
+      <LanguagesSelect />
     </>
   );
 }
