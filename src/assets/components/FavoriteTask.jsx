@@ -6,8 +6,8 @@ import {options} from "./dateOptions.js";
 import ReminderModal from "./ReminderModal.jsx";
 import {useRef} from "react";
 
-export default function FavoriteTask({favorite, onAddFavorite, handleDeleteFavorite, remove, projectObj, onAddReminder, reminders}) {
-    let currentLang = 'en-US';
+export default function FavoriteTask({favorite, onAddFavorite, handleDeleteFavorite, remove, projectObj, onAddReminder, reminders, languages}) {
+    let currentLang = languages.formDate;
     const formatDate = new Date().toLocaleDateString(currentLang, options);
 
     const dialog = useRef();
@@ -80,7 +80,7 @@ export default function FavoriteTask({favorite, onAddFavorite, handleDeleteFavor
                         </div>
                     </div>
 
-                    <ReminderModal reminders={reminders} onAddReminder={onAddReminder} projectObj={projectObj} currentTask={currentTask} ref={dialog} />
+                    <ReminderModal languages={languages} reminders={reminders} onAddReminder={onAddReminder} projectObj={projectObj} currentTask={currentTask} ref={dialog} />
                 </li>})}</ul>}
         </>
     );
