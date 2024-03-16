@@ -10,9 +10,10 @@ import {options} from "./dateOptions.js";
 import FavoriteIcon from "./FavoriteIcon.jsx";
 import FavoriteTask from "./FavoriteTask.jsx";
 import ReminderModal from "./ReminderModal.jsx";
+import {languages} from "./languages.js";
 
 
-export default function ProjectTasks({onDelete, onAdd, tasksList, favoriteList, onAddFavorite, handleDeleteFavorite, remove, projectObj, onAddReminder, reminders}) {
+export default function ProjectTasks({onDelete, onAdd, tasksList, favoriteList, onAddFavorite, handleDeleteFavorite, remove, projectObj, onAddReminder, reminders, languages}) {
 
     const dialog = useRef();
     const currentTask= {task: ''};
@@ -28,7 +29,7 @@ export default function ProjectTasks({onDelete, onAdd, tasksList, favoriteList, 
     }
 
 
-    let currentLang = 'en-US';
+    let currentLang = languages.formDate;
 
     const formatDate = new Date().toLocaleDateString(currentLang, options);
 
@@ -46,10 +47,10 @@ export default function ProjectTasks({onDelete, onAdd, tasksList, favoriteList, 
 
     return (
         <div>
-            <h2 className="text-3xl font-bold mb-4">Tasks</h2>
-            <NewTask onAdd={onAdd} />
-            {(tasksList.length === 0 && favoriteList.length === 0) && <p className="mb-4">No tasks yet</p>}
-            <FavoriteTask reminders={reminders} onAddReminder={onAddReminder} projectObj={projectObj} remove={remove} handleDeleteFavorite={handleDeleteFavorite} onAddFavorite={onAddFavorite} favorite={favoriteList}/>
+            <h2 className="text-3xl font-bold mb-4">{languages.tasks}</h2>
+            <NewTask  languages={languages} onAdd={onAdd} />
+            {(tasksList.length === 0 && favoriteList.length === 0) && <p className="mb-4">{languages.projectTask}</p>}
+            <FavoriteTask languages={languages} reminders={reminders} onAddReminder={onAddReminder} projectObj={projectObj} remove={remove} handleDeleteFavorite={handleDeleteFavorite} onAddFavorite={onAddFavorite} favorite={favoriteList}/>
             {tasksList.length > 0 && <ul className="rounded-lg">{tasksList.map(item => {
                 let itemMs = new Date(item.dueDate).getTime();
                 let reminder;
@@ -75,8 +76,8 @@ export default function ProjectTasks({onDelete, onAdd, tasksList, favoriteList, 
                return <li className="text-xl rounded-lg bg-stone-300 my-4 p-2 animate-ping-once shadow-xl" key={item.id}>
                     <div className="flex justify-between">
                     <span className="break-all mx-0 my-auto">{item.text}</span>
-                    <div className="flex"> <button onClick={() => onDelete(item.id)} className="px-4 py-3 font-medium text-black font-sans hover:text-red-700 transition-colors">Clear</button>
-                        <FavoriteIcon remove={remove} isFavorite={false} onAddFavorite={() => {onAddFavorite(item.id)}}
+                    <div className="flex"> <button onClick={() => onDelete(item.id)} className="px-4 py-3 font-medium text-black font-sans hover:text-red-700 transition-colors">{languages.favoriteTaskBtn}</button>
+                        <FavoriteIcon  remove={remove} isFavorite={false} onAddFavorite={() => {onAddFavorite(item.id)}}
                         /></div>
                     </div>
                    <div className="font-bold flex justify-between">
@@ -93,7 +94,7 @@ export default function ProjectTasks({onDelete, onAdd, tasksList, favoriteList, 
                            <span className='font-medium'>{(reminderDate === 'Invalid Date' ? '' : reminderDate) || ''}{` ${reminderTime || ''}`}</span> <img onClick={() => handleOpenModal(item)} className="w-6 h-6 cursor-pointer hover:opacity-80 transition-opacity" src={reminderIcon} alt="reminder"/>
                        </div>
                    </div>
-                   <ReminderModal reminders={reminders} onAddReminder={onAddReminder} projectObj={projectObj} currentTask={currentTask} ref={dialog} />
+                   <ReminderModal  languages={languages} reminders={reminders} onAddReminder={onAddReminder} projectObj={projectObj} currentTask={currentTask} ref={dialog} />
                    </li>})}</ul>}
         </div>
     );

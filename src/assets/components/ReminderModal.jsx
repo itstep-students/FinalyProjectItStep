@@ -1,7 +1,8 @@
 import {forwardRef, useRef, useImperativeHandle, useEffect, useState} from "react";
 
 
-const ReminderModal = forwardRef(function ReminderModal({currentTask, projectObj, onAddReminder, reminders}, ref) {
+
+const ReminderModal = forwardRef(function ReminderModal({currentTask, projectObj, onAddReminder, reminders, languages}, ref) {
     const dialog = useRef();
     const formRef = useRef();
     const dateRef = useRef();
@@ -115,22 +116,22 @@ const ReminderModal = forwardRef(function ReminderModal({currentTask, projectObj
                     <button onClick={clearModal} className="text-3xl hover:opacity-70 transition-opacity">X</button>
                 </form>
             </div>
-            <div className="text-3xl text-center mb-6 leading-3">{changeReminder ? 'Change' : 'Set'} a reminder</div>
+            <div className="text-3xl text-center mb-6 leading-3">{changeReminder ? languages.reminderModalTitle2 : languages.reminderModalTitle1}</div>
             <form className="flex flex-col gap-5" ref={formRef}>
                 <div className="flex bg-stone-300 gap-20 mx-5">
                     <div className={`flex rounded-lg bg-stone-200 gap-4 flex-col w-2/4 mx-auto my-0 outline-2 outline-none text-center ${styles.date && 'outline-red-700'}`}>
-                        <label htmlFor="reminder-date">Pick a date</label>
+                        <label htmlFor="reminder-date">{languages.reminderDate}</label>
                         <input ref={dateRef} onChange={(e) => handleChange(e, 'date')} id="ddd" className="bg-stone-200 w-36 mx-auto my-0  mb-1" name="reminder-date" type="date"/>
                     </div>
                     <div className={`flex rounded-lg bg-stone-200 gap-4 flex-col w-2/4 mx-auto my-0 text-center outline-2 outline-none ${styles.time && 'outline-red-700'}`}>
-                        <label htmlFor="reminder-time">Pick a time</label>
+                        <label htmlFor="reminder-time">{languages.reminderTime}</label>
                         <input ref={timeRef} onChange={(e) => handleChange(e, 'time')} className="bg-stone-200 w-22 mx-auto my-0 mb-1" name="reminder-time" type="time"/>
                     </div>
                 </div>
 
                 <form method="dialog" className="flex justify-center">
                     <button onClick={handleSaveReminder} className="rounded-lg w-32 mx-auto my-0 opacity-75 px-6 py-3 bg-stone-800 text-xl text-white font-sans hover:opacity-85 transition-opacity"
-                    >{changeReminder ? 'Change' : 'Save'}</button>
+                    >{changeReminder ? languages.reminderBtn2 : languages.reminderBtn1}</button>
                 </form>
 
             </form>
