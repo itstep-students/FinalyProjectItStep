@@ -5,6 +5,7 @@ import clockIcon from '/clock.svg';
 import {options} from "./dateOptions.js";
 import ReminderModal from "./ReminderModal.jsx";
 import {useRef} from "react";
+import {languages} from "./languages.js";
 
 export default function FavoriteTask({favorite, onAddFavorite, handleDeleteFavorite, remove, projectObj, onAddReminder, reminders, languages}) {
     let currentLang = languages.formDate;
@@ -62,7 +63,7 @@ export default function FavoriteTask({favorite, onAddFavorite, handleDeleteFavor
                 return <li className="text-xl rounded-lg bg-stone-300 my-4 p-2 outline-4 outline-none outline-yellow-500 outline-offset-[inherit] animate-ping-once shadow-xl" key={item.id}>
                     <div className="flex justify-between">
                         <span className="break-all mx-0 my-auto">{item.text}</span>
-                        <div className="flex"> <button onClick={() => handleDeleteFavorite(item.id)} className=" px-4 py-3 font-medium text-black font-sans hover:text-red-700 transition-colors">Clear</button>
+                        <div className="flex"> <button onClick={() => handleDeleteFavorite(item.id)} className=" px-4 py-3 font-medium text-black font-sans hover:text-red-700 transition-colors">{languages.favoriteTaskBtn}</button>
                             <FavoriteIcon remove={() => remove(item.id)} isFavorite={true} handleDeleteFavorite={handleDeleteFavorite} onAddFavorite={() => onAddFavorite(item.id)} task={favorite}/></div>
                     </div>
                     <div className="font-bold flex justify-between">

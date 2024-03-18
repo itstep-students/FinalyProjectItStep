@@ -11,7 +11,7 @@ export default function SideProject({project, onDelete, onDeleteTask, onAddTask,
         <div className="w-8/12 font-sans px-16 py-12">
             <div className="mb-4">
                 <div className="flex items-center justify-between">
-                    <h2 className="text-5xl font-bold my-4 break-all w-full">{project.title}</h2>
+                    <h2 className="text-5xl font-bold my-3 break-all w-full">{project.title}</h2>
                     <button onClick={onDelete} className="mr-4 px-4 py-3 text-xl font-medium text-black font-sans hover:text-red-700 transition-colors">{languages.sideProjectBtn}</button>
                 </div>
                 <p className="text-2xl text-gray-600 mb-6">{formatDate}</p>

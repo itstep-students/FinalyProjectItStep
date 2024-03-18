@@ -39,13 +39,14 @@ function App() {
 
     function handleAddTask(task) {
         updateProjects(oldParam => {
-            let currentLang = 'en-US';
-
-            const formatDate = new Date(task.date).toLocaleDateString(currentLang, options);
+            const formatDateEn = new Date(task.date).toLocaleDateString('en-US', options);
+            const formatDateRu = new Date(task.date).toLocaleDateString('ru-RU', options);
+            console.log(formatDateRu)
             const newTask = {
                 text: task.name,
                 id: Math.random(),
-                dueDateFormat: `${formatDate === 'Invalid Date' ? '—' : formatDate}`,
+                dueDateFormatEn: `${formatDateEn === 'Invalid Date' ? '—' : formatDateEn}`,
+                dueDateFormatRu: `${formatDateRu === 'Invalid Date' ? '—' : formatDateRu}`,
                 dueDate: task.date,
                 time: `${task.time === '' ? '—' : task.time}`,
                 projectId: oldParam.selectedID

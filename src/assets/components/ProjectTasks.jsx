@@ -30,7 +30,7 @@ export default function ProjectTasks({onDelete, onAdd, tasksList, favoriteList, 
 
 
     let currentLang = languages.formDate;
-
+    // console.log(currentLang == "en-US" ? dueDateFormatEn : dueDateFormatRu)
     const formatDate = new Date().toLocaleDateString(currentLang, options);
 
     let colorFlag = {date: '', time: ''};
@@ -61,7 +61,8 @@ export default function ProjectTasks({onDelete, onAdd, tasksList, favoriteList, 
                     reminderDate = new Date(reminder.date).toLocaleDateString(currentLang, options);
                     reminderTime = reminder.time;
                 }
-                if ((item.dueDateFormat === formatDate) || currentMs - itemMs >= 0) {
+                if ((item.dueDateFormatEn === formatDate) || currentMs - itemMs >= 0) {
+                    // console.log(item.d)
                     colorFlag.date = ' text-red-600';
                     colorFlag.time = ' text-red-600';
                    timeChecker(item);
@@ -83,7 +84,7 @@ export default function ProjectTasks({onDelete, onAdd, tasksList, favoriteList, 
                    <div className="font-bold flex justify-between">
                        <div className="flex gap-5">
                            <div className="flex justify-center items-center gap-2">
-                               <img src={dateIcon} alt="date"/><span className={`font-medium ${colorFlag.date}`}>{item.dueDateFormat}</span>
+                               <img src={dateIcon} alt="date"/><span className={`font-medium ${colorFlag.date}`}>{currentLang == "en-US" ? item.dueDateFormatEn : item.dueDateFormatRu}</span>
                            </div>
                            <div className="flex justify-center items-center gap-2">
                                <img src={clockIcon} alt="time"/><span className={`font-medium ${colorFlag.time}`}>{item.time}</span>

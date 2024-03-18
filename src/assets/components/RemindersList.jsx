@@ -10,7 +10,7 @@ export default function RemindersList({list, open, reminders, onDeleteReminder, 
     </div>;
 
     return (
-        <div className="absolute bottom-20 right-10 flex gap-4 justify-between">
+        <div className="absolute top-52 right-10 flex gap-4 justify-between">
             {list && listOfReminders}
             <button onClick={open} className="self-start"><img src={reminders.length > 0 ? remindersIcon : emptyReminders} alt="reminders"/></button>
 
